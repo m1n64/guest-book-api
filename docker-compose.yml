@@ -1,0 +1,87 @@
+# For more information: https://laravel.com/docs/sail
+version: '3.8'
+services:
+    laravel.test:
+        build:
+            context: ./docker/php
+            dockerfile: Dockerfile
+            target: base
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.2/app
+        container_name: app-l11
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:8000'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '${REVERB_PORT-8080}:8080'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: 'none'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+            DB_CONNECTION: 'pgsql'
+            DB_HOST: db
+            DB_PORT: 5432
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+            REDIS_HOST: redis
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - db
+            - redis
+            - mailhog
+        networks:
+            - laravel_11_docker_template_network
+
+    db:
+        image: postgres:15
+        container_name: db-l11
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db-data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        networks:
+            - laravel_11_docker_template_network
+
+    redis:
+        image: redis:alpine
+        container_name: redis-l11
+        volumes:
+            - ./redis:/data
+        ports:
+            - "6379:6379"
+        networks:
+            - laravel_11_docker_template_network
+
+
+    mailhog:
+        image: 'mailhog/mailhog:latest'
+        container_name: mailhog-l11
+        ports:
+            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
+            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+        networks:
+            - laravel_11_docker_template_network
+
+    adminer:
+        image: adminer
+        container_name: adminer-l11
+        restart: always
+        networks:
+            - laravel_11_docker_template_network
+
+volumes:
+    db-data:
+
+networks:
+    laravel_11_docker_template_network:
+        driver: bridge
