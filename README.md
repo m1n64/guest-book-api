@@ -12,19 +12,12 @@ Libs: [Telescope](https://laravel.com/docs/11.x/telescope), [Horizon](https://la
 
 ### Startup:
 ```bash
-git clone git@github.com:m1n64/laravel-11-docker-template.git my-project
+git clone git@github.com:m1n64/guest-book-api.git
 ```
-(or)
-```bash
-composer create-project m1n64/laravel-11-docker-template
-```
-(for swoole server use)
-```bash 
-composer create-project m1n64/laravel-11-docker-template:2.0.1
-```
+
 Next,
 ```bash
-cd my-project
+cd guest-book-api
 ```
 ```bash
 cp .env.example .env
