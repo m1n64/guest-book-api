@@ -10,3 +10,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 import './echo';
+
+import { Centrifuge } from 'centrifuge';
+window.Centrifuge = Centrifuge;
+
+/*
+Echo.channel('public')
+    .listen('.new.review', (e) => {
+        console.log(e);
+    });
+
+Echo.channel('private.1')
+    .listen('.new.reply', (e) => {
+        console.log(e);
+    });
+*/

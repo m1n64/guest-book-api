@@ -62,11 +62,12 @@ ENTRYPOINT ["start-container"]
 
 FROM base AS dev
 
-RUN  echo "deb [signed-by=/etc/apt/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
-    && apt-get update \
-    && apt-get install -y php8.3-xdebug \
-    && echo "xdebug.mode=debug" >> /etc/php/8.3/cli/conf.d/99-sail.ini \
-    && echo "xdebug.start_with_request=yes" >> /etc/php/8.3/cli/conf.d/99-sail.ini \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# xdebug must to be fixed
+#RUN  echo "deb [signed-by=/etc/apt/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
+#    && apt-get update \
+#    && apt-get install -y php8.3-xdebug \
+#    && echo "xdebug.mode=debug" >> /etc/php/8.3/cli/conf.d/99-sail.ini \
+#    && echo "xdebug.start_with_request=yes" >> /etc/php/8.3/cli/conf.d/99-sail.ini \
+#    && apt-get -y autoremove \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

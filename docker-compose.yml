@@ -9,11 +9,11 @@ services:
             args:
                 WWWGROUP: '${WWWGROUP}'
         image: sail-8.2/app
-        container_name: app-l11
+        container_name: app-guest-book
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:8000'
+            # - '${APP_PORT:-80}:8000'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
             - '${REVERB_PORT-8080}:8080'
         environment:
@@ -22,9 +22,9 @@ services:
             XDEBUG_MODE: 'none'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
-            DB_CONNECTION: 'pgsql'
+            DB_CONNECTION: 'mysql'
             DB_HOST: db
-            DB_PORT: 5432
+            DB_PORT: 3306
             DB_USERNAME: ${DB_USERNAME}
             DB_PASSWORD: ${DB_PASSWORD}
             REDIS_HOST: redis
@@ -35,53 +35,91 @@ services:
             - redis
             - mailhog
         networks:
-            - laravel_11_docker_template_network
+            - guest_book_network
+
+    nginx:
+        image: nginx:latest
+        container_name: nginx-guest-book
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - "${APP_PORT:-80}:80"
+        depends_on:
+            - laravel.test
+        networks:
+            - guest_book_network
 
     db:
-        image: postgres:15
-        container_name: db-l11
+        image: mysql:8
+        container_name: db-guest-book
         restart: unless-stopped
         environment:
-            POSTGRES_DB: ${DB_DATABASE}
-            POSTGRES_USER: ${DB_USERNAME}
-            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
         volumes:
-            - db-data:/var/lib/postgresql/data
+            - ./db:/var/lib/mysql/
         ports:
-            - "5432:5432"
+            - "3306:3306"
         networks:
-            - laravel_11_docker_template_network
+            - guest_book_network
+
+#    db:
+#        image: postgres:15
+#        container_name: db-guest-book
+#        restart: unless-stopped
+#        environment:
+#            POSTGRES_DB: ${DB_DATABASE}
+#            POSTGRES_USER: ${DB_USERNAME}
+#            POSTGRES_PASSWORD: ${DB_PASSWORD}
+#        volumes:
+#            - db-data:/var/lib/postgresql/data
+#        ports:
+#            - "5432:5432"
+#        networks:
+#            - guest_book_network
 
     redis:
         image: redis:alpine
-        container_name: redis-l11
+        container_name: redis-guest-book
         volumes:
             - ./redis:/data
         ports:
             - "6379:6379"
         networks:
-            - laravel_11_docker_template_network
+            - guest_book_network
 
+    centrifugo:
+        image: centrifugo/centrifugo:latest
+        container_name: centrifugo-guest-book
+        ports:
+            - "9000:8000"
+        volumes:
+            - ./docker/centrifugo:/centrifugo
+        command: centrifugo -c /centrifugo/config.json
+        networks:
+            - guest_book_network
 
     mailhog:
         image: 'mailhog/mailhog:latest'
-        container_name: mailhog-l11
+        container_name: mailhog-guest-book
         ports:
             - '${FORWARD_MAILHOG_PORT:-1025}:1025'
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
-            - laravel_11_docker_template_network
+            - guest_book_network
 
     adminer:
         image: adminer
-        container_name: adminer-l11
+        container_name: adminer-guest-book
         restart: always
         networks:
-            - laravel_11_docker_template_network
+            - guest_book_network
 
 volumes:
     db-data:
 
 networks:
-    laravel_11_docker_template_network:
+    guest_book_network:
         driver: bridge

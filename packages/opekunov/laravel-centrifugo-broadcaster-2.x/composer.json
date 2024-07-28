@@ -1,0 +1,61 @@
+{
+    "name": "opekunov/laravel-centrifugo-broadcaster",
+    "type": "library",
+    "description": "Centrifugo broadcaster for laravel 8-9.x and Centrifugo >= 2.8.1",
+    "keywords": [
+        "laravel-broadcaster",
+        "broadcaster",
+        "laravel",
+        "centrifugo",
+        "web socket",
+        "web-socket",
+        "socket",
+        "real time"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksandr Opekunov",
+            "email": "iam@opekunov.com",
+            "role": "Creator"
+        }
+    ],
+    "homepage": "https://github.com/opekunov/laravel-centrifugo-broadcaster",
+    "support": {
+        "email": "iam@opekunov.com",
+        "issues": "https://github.com/opekunov/laravel-centrifugo-broadcaster/issues",
+        "source": "https://github.com/opekunov/laravel-centrifugo-broadcaster"
+    },
+    "require": {
+        "php": "^8.0|^8.1",
+        "laravel/framework": "^8.75|^9.0|^10.0|^11.0",
+        "guzzlehttp/guzzle": "~6.0|^7.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5|^10.5",
+        "orchestra/testbench": "^v7.4.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Opekunov\\Centrifugo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Opekunov\\Centrifugo\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Opekunov\\Centrifugo\\CentrifugoServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

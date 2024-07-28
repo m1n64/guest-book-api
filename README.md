@@ -1,12 +1,14 @@
-## Laravel 11 + Octane (RoadRunner) + sail + Reverb template
+## Guest Book REST API + WS
 
-Stack: PHP 8.3, Laravel 11 (Octane, Sanctum, Sail, Reverb), PostgreSQL 15, Vite (node.js 20), Redis
+Stack: PHP 8.3, Laravel 11 (Octane, Sanctum, Sail, Reverb), MySQL 8, Vite (node.js 20), Redis
 
 Mail: mailhog
 
 DB admin: adminer
 
-Libs: [Telescope](https://laravel.com/docs/11.x/telescope), [Horizon](https://laravel.com/docs/11.x/horizon), [internachi/modular](https://github.com/InterNACHI/modular)
+Websocket: Centrifugo (or Reverb)
+
+Libs: [Telescope](https://laravel.com/docs/11.x/telescope), [Horizon](https://laravel.com/docs/11.x/horizon), [internachi/modular](https://github.com/InterNACHI/modular), [scramble](https://scramble.dedoc.co/)
 
 ### Startup:
 ```bash
@@ -61,13 +63,13 @@ Reload app:
 ./sail -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
-### ToDo:
-1. Add Telescope
-2. Add Horizon
-
 App successfully installed!
 
 App url: [http://localhsot](http://localhost)
+
+API url: [http://localhsot/api/v1](http://localhost/api/v1)
+
+API Docs url: [http://localhsot/docs/api](http://localhost/docs/api)
 
 Telescope url: [http://localhsot/telescope](http://localhost/telescope)
 
@@ -75,7 +77,7 @@ Horizon url: [http://localhsot/horizon](http://localhost/horizon)
 
 Mailhog url: [http://localhsot:8025](http://localhost:8025)
 
-Adminer url: [http://localhsot:1337](http://localhost:1337) (login `sail`, pass `password`, driver `PostgreSQL`)
+Adminer url: [http://localhsot:1337](http://localhost:1337) (login `sail`, pass `password`, driver `MySQL`)
 
 ***
 
