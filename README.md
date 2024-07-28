@@ -2,6 +2,8 @@
 
 Stack: PHP 8.3, Laravel 11 (Octane, Sanctum, Sail, Reverb), MySQL 8, Vite (node.js 20), Redis
 
+Server, reverse proxy: nginx
+
 Mail: mailhog
 
 DB admin: adminer
